@@ -247,7 +247,8 @@ vim.api.nvim_set_keymap('n', 'ee', ':NvimTreeFocus<CR>', { noremap = true, silen
 vim.api.nvim_set_keymap('n', 'en', ':NvimTreeToggle<CR>', { noremap = true, silent = true })
 
 -- Toggle diagnostics
-vim.api.nvim_set_keymap('n', '<leader>i', '<cmd>lua vim.diagnostic.open_float()<CR>', { noremap = true, silent = true })
+vim.api.nvim_set_keymap('n', '<leader>ii', '<cmd>lua vim.diagnostic.open_float()<CR>', { noremap = true, silent = true })
+vim.keymap.set('n', '<leader>id', vim.lsp.buf.definition, { desc = 'Go to definition' })
 -- new tab
 vim.api.nvim_set_keymap('n', '<leader>tn', ':tabnew<CR>', { noremap = true, silent = true })
 -- new tab with terminal
