@@ -1,6 +1,7 @@
 Install latest nvim through the sh file
 
 Confirm with nvim -version
+If the version is old please try the versionfixer.sh
 
 Place init.lua in ~/.config/nvim/init.lua
 
