@@ -290,6 +290,7 @@ vim.keymap.set('n', 'sv', ':vsplit<CR>', { noremap = true, silent = true })
 -- telescope bindings
 vim.keymap.set('n', '<leader>ff', '<cmd>Telescope find_files<cr>', { desc = 'Find Files' })
 vim.keymap.set('n', '<leader>fg', '<cmd>Telescope live_grep<cr>', { desc = 'Live Grep' })
+vim.keymap.set('n', '<leader>fa', '<cmd>Telescope<cr>', { desc = 'See all Telescope commands' })
 
 -- macro bindings
 vim.keymap.set('n', '<leader>ma', '@a')
