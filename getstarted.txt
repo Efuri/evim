@@ -1,11 +1,17 @@
-Install latest nvim through the sh file
+The sh files have only been amateurly runned on Debian based systems. Run on your own risk and read what they do before running.
 
-Confirm with nvim -version
-If the version is old please try the versionfixer.sh
+Setup:
+Confirm with Nvim -version
+If you do not have a modern Nvim install (Many package managers have outaded Nvim installations):
+  Install latest nvim through the sh file
+
+If you installed your Nvim now: 
+  Confirm with Nvim -version
+  If the version is old please try the versionfixer.sh
 
 Place init.lua in ~/.config/nvim/init.lua
 
 Open nvim and run:
-PackerSync
+  PackerSync
 And for your lsp packages
-MasonInstall //Package
+  MasonInstall //Package to install (clangd for C languages)
