@@ -242,9 +242,9 @@ vim.opt.relativenumber = true
 
 -- Toggle tree
 -- 'ee' to focus Nvim Tree
-vim.api.nvim_set_keymap('n', 'ee', ':NvimTreeFocus<CR>', { noremap = true, silent = true })
+vim.api.nvim_set_keymap('n', '<leader>ee', ':NvimTreeFocus<CR>', { noremap = true, silent = true })
 -- 'en' to toggle Nvim Tree
-vim.api.nvim_set_keymap('n', 'en', ':NvimTreeToggle<CR>', { noremap = true, silent = true })
+vim.api.nvim_set_keymap('n', '<leader>en', ':NvimTreeToggle<CR>', { noremap = true, silent = true })
 
 -- Toggle diagnostics
 vim.api.nvim_set_keymap('n', '<leader>ii', '<cmd>lua vim.diagnostic.open_float()<CR>', { noremap = true, silent = true })
