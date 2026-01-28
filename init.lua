@@ -21,11 +21,9 @@ require('packer').startup(function(use)
     use 'hrsh7th/cmp-nvim-lsp'
     require("mason").setup()
 
-    -- Auto-install & configure LSPs
-    require("mason-lspconfig").setup({
-        ensure_installed = { "clangd" },  -- Auto-install clangd
-        automatic_installation = true,     -- Install missing servers on startup
-    })
+require("mason").setup()
+require("mason-lspconfig").setup({
+})
 
     -- Telescope
     use {
@@ -185,28 +183,28 @@ require('packer').startup(function(use)
     }
 end)
 
-local lspconfig = require('lspconfig')
-lspconfig.clangd.setup({
-    cmd = { "clangd" }, -- Optional: specify path if not in $PATH
-    filetypes = { "c", "cpp", "objc", "objcpp" },
-    root_dir = lspconfig.util.root_pattern("compile_commands.json", ".git"),
-})
+-- Treesitter setup
+local ts_status, ts = pcall(require, 'nvim-treesitter.configs')
+if ts_status then
+    ts.setup {
+        ensure_installed = { "lua", "python", "javascript", "html", "cpp" },
+        highlight = { enable = true },
+    }
+else
+    print("Treesitter not loaded yet - run :PackerSync")
+end
 
 -- Autocomplete setup
-local cmp = require('cmp')
-cmp.setup({
-    mapping = cmp.mapping.preset.insert({
-        ['<C-Space>'] = cmp.mapping.complete(),
-        ['<CR>'] = cmp.mapping.confirm({ select = true }),
-    }),
-    sources = { { name = 'nvim_lsp' } },
-})
-
--- Treesitter setup
-require('nvim-treesitter.configs').setup {
-    ensure_installed = { "lua", "python", "javascript", "html", "cpp" },
-    highlight = { enable = true },
-}
+local cmp_status, cmp = pcall(require, 'cmp')
+if cmp_status then
+    cmp.setup({
+        mapping = cmp.mapping.preset.insert({
+            ['<C-Space>'] = cmp.mapping.complete(),
+            ['<CR>'] = cmp.mapping.confirm({ select = true }),
+        }),
+        sources = { { name = 'nvim_lsp' } },
+    })
+end
 
 -- Sidebar setup
 require("nvim-tree").setup()
@@ -242,9 +240,9 @@ vim.opt.relativenumber = true
 
 -- Toggle tree
 -- 'ee' to focus Nvim Tree
-vim.api.nvim_set_keymap('n', 'ee', ':NvimTreeFocus<CR>', { noremap = true, silent = true })
+vim.api.nvim_set_keymap('n', '<leader>ee', ':NvimTreeFocus<CR>', { noremap = true, silent = true })
 -- 'en' to toggle Nvim Tree
-vim.api.nvim_set_keymap('n', 'en', ':NvimTreeToggle<CR>', { noremap = true, silent = true })
+vim.api.nvim_set_keymap('n', '<leader>en', ':NvimTreeToggle<CR>', { noremap = true, silent = true })
 
 -- Toggle diagnostics
 vim.api.nvim_set_keymap('n', '<leader>ii', '<cmd>lua vim.diagnostic.open_float()<CR>', { noremap = true, silent = true })
@@ -281,7 +279,10 @@ vim.keymap.set('n', '<leader>wa', ':wa<CR>', opts)
 vim.keymap.set('n', '<leader>qq', ':q<CR>', opts)
 
 -- Quit all (leader + qa)
-vim.keymap.set('n', '<leader>qa', ':qa<CR>', opts)
+vim.keymap.set('n', '<leader>qa', function()
+    vim.cmd('mks! s.nvim')  -- Save session
+    vim.cmd('qa')             -- Quit all
+end, opts)
 
 -- Splits
 vim.keymap.set('n', 'ss', ':split<CR>', { noremap = true, silent = true })
@@ -301,6 +302,32 @@ vim.keymap.set('n', '<leader>mm', '@@')
 --gitsigns
 vim.keymap.set('n', '<leader>bb', '<cmd>Gitsigns toggle_current_line_blame<cr>', { desc = 'Toggles gitlbame' })
 vim.keymap.set('n', '<leader>bh', '<cmd>Telescope git_file_history<cr>', { desc = 'Toggles gitlbame' })
+
+-- latex
+vim.keymap.set("n", "<leader>ll", function()
+  local file = vim.fn.expand("%")
+  vim.cmd("write") -- save first
+  vim.cmd("!pdflatex " .. file)
+end, { desc = "Compile LaTeX with pdflatex" })
+
+vim.keymap.set("n", "<leader>lw", function()
+  local file = vim.fn.expand("%")
+  vim.cmd("write")  -- save first
+  local output = vim.fn.system({"texcount", file})
+  print(output)
+end, { desc = "Word count for LaTeX" })
+
+
+
+
+
+
+
+
+
+
+--text shortcuts
+--vim.keymap.set("n", "<leader>ii", "i#include <>\27i", { noremap = true })
 
 
 
