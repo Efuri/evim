@@ -317,7 +317,31 @@ vim.keymap.set("n", "<leader>lw", function()
   print(output)
 end, { desc = "Word count for LaTeX" })
 
-
+vim.api.nvim_create_user_command('Rapport', function()
+  local lines = {
+    '\\documentclass[a4paper, oneside]{article}',
+    '',
+    '\\usepackage[utf8]{inputenc}',
+    '\\usepackage[T1]{fontenc}',
+    '',
+    '\\usepackage[swedish]{babel}',
+    '%\\usepackage[english]{babel}',
+    '',
+    '\\usepackage[style=authoryear, backend=biber]{biblatex}',
+    '\\addbibresource{references.bib}',
+    '',
+    '\\title{}',
+    '\\author{}',
+    '\\date{\\today}',
+    '',
+    '\\begin{document}',
+    '\\maketitle',
+    '',
+    '',
+    '\\end{document}',
+  }
+  vim.api.nvim_put(lines, 'l', true, true)
+end, {})
 
 
 
