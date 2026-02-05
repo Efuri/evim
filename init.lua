@@ -319,10 +319,11 @@ end, { desc = "Word count for LaTeX" })
 
 vim.api.nvim_create_user_command('Rapport', function()
   local lines = {
-    '\\documentclass[a4paper, oneside]{article}',
+    '\\documentclass[12pt, a4paper, oneside]{article}',
     '',
     '\\usepackage[utf8]{inputenc}',
     '\\usepackage[T1]{fontenc}',
+    '\\usepackage[a4paper, margin=2cm]{geometry}',
     '',
     '\\usepackage[swedish]{babel}',
     '%\\usepackage[english]{babel}',
@@ -353,7 +354,8 @@ end, {})
 --text shortcuts
 --vim.keymap.set("n", "<leader>ii", "i#include <>\27i", { noremap = true })
 
-
+vim.o.timeoutlen = 500
+vim.o.ttimeoutlen = 10
 
 -- show window bar
 vim.opt.winbar = "%f %m"
