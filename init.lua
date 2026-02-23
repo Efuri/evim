@@ -331,6 +331,14 @@ vim.api.nvim_create_user_command('Rapport', function()
     '\\usepackage[style=authoryear, backend=biber]{biblatex}',
     '\\addbibresource{references.bib}',
     '',
+    '\\usepackage{listings}',
+    '%\\usepackage{graphicx}',
+    '',
+    '\\lstset{',
+      'basicstyle=\\ttfamily\\bfseries,',
+      'breakindent=0pt,',
+      'breaklines=true',
+    '}',
     '\\title{}',
     '\\author{}',
     '\\date{\\today}',
@@ -342,6 +350,34 @@ vim.api.nvim_create_user_command('Rapport', function()
     '\\end{document}',
   }
   vim.api.nvim_put(lines, 'l', true, true)
+end, {})
+
+vim.api.nvim_create_user_command('BF', function()
+  local row, _ = unpack(vim.api.nvim_win_get_cursor(0))
+  
+  local lines = {
+    '\\begin{lstlisting}[basicstyle=\\bfseries]',
+    '',
+    '\\end{lstlisting}'
+  }
+  vim.api.nvim_buf_set_lines(0, row, row, true, lines)
+
+  vim.api.nvim_win_set_cursor(0, {row + 2, 0})
+end, {})
+
+vim.api.nvim_create_user_command('BILD', function()
+  local row, _ = unpack(vim.api.nvim_win_get_cursor(0))
+  
+  local lines = {
+    '\\begin{figure}[h]',
+        '\\centering',
+        '\\includegraphics[width=0.6\\textwidth]{bilder/kursbok.jpg}',
+        '\\caption{Kursboks tabell}',
+        '\\label{fig:kursbok}',
+    '\\end{figure}'
+  }
+  vim.api.nvim_buf_set_lines(0, row, row, true, lines)
+  vim.api.nvim_win_set_cursor(0, {row + 3, 0})
 end, {})
 
 
@@ -359,3 +395,10 @@ vim.o.ttimeoutlen = 10
 
 -- show window bar
 vim.opt.winbar = "%f %m"
+
+vim.api.nvim_create_user_command('Clean', function(opts)
+    -- Inaktivera highlighting temporärt för att undvika "out of range"
+    local line1 = opts.line1
+    local line2 = opts.line2
+    vim.cmd(string.format('%d,%dg/^$/d', line1, line2))
+end, { range = true })
