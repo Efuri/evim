@@ -406,3 +406,6 @@ end, { range = true })
 
 -- blackhole paste
 vim.keymap.set('v', '<leader>p', '\"_dP')
+
+-- remove help
+vim.api.nvim_set_keymap('', '<F1>', '<Nop>', { noremap = true, silent = true })
