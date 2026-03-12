@@ -402,3 +402,7 @@ vim.api.nvim_create_user_command('Clean', function(opts)
     local line2 = opts.line2
     vim.cmd(string.format('%d,%dg/^$/d', line1, line2))
 end, { range = true })
+
+
+-- blackhole paste
+vim.keymap.set('v', '<leader>p', '\"_dP')
