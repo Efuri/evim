@@ -9,9 +9,6 @@ require('packer').startup(function(use)
     -- Packer manages itself
     use 'wbthomason/packer.nvim'
 
-    -- Sidebar
-    use 'nvim-tree/nvim-web-devicons'
-
     -- LSP and Autocomplete
     -- Initialize Mason (must run before lspconfig)
     use 'williamboman/mason.nvim'
@@ -20,6 +17,9 @@ require('packer').startup(function(use)
     use 'hrsh7th/nvim-cmp'
     use 'hrsh7th/cmp-nvim-lsp'
     require("mason").setup()
+    use {
+    'nvim-web-devicons'
+    }
 
 require("mason").setup()
 require("mason-lspconfig").setup({
@@ -52,17 +52,17 @@ require("mason-lspconfig").setup({
 
     --bottombarr
     use {
-        'nvim-lualine/lualine.nvim',
-        requires = { 'nvim-tree/nvim-web-devicons' },
-        config = function()
-            require('lualine').setup {
-                options = {
-                    icons_enabled = true,
-                    globalstatus = true,
-                },
-            }
-        end
-    }
+    'nvim-lualine/lualine.nvim',
+    requires = { 'nvim-web-devicons' },  -- Keep the requirement for the icons
+    config = function()
+        require('lualine').setup {
+            options = {
+                icons_enabled = true,  -- Enable icons support
+                globalstatus = true,
+            },
+        }
+    end
+}
 
     -- Treesitter
     use { 'nvim-treesitter/nvim-treesitter', run = ':TSUpdate' }
@@ -138,42 +138,6 @@ require("mason-lspconfig").setup({
         end
     }
 
-    --nvim tree
-    use {
-        'nvim-tree/nvim-tree.lua',
-        requires = 'nvim-tree/nvim-web-devicons',
-        config = function()
-            require('nvim-tree').setup {
-                -- Your existing config
-                update_focused_file = {
-                    enable = true,
-                },
-                git = { 
-                    enable = true 
-                },
-                renderer = { 
-                    icons = { 
-                        show = { 
-                            git = true 
-                        } 
-                    } 
-                },
-
-                -- New buffer control additions
-                actions = {
-                    open_file = {
-                        window_picker = {
-                            enable = false           -- Prevent window stealing
-                        },
-                        resize_window = false      -- Don't resize windows
-                    }
-                },
-                hijack_directories = {
-                    enable = false               -- Prevent auto-directory focus
-                }
-            }
-        end
-    }
     --mouse rezise
     use {
         "sindrets/winshift.nvim",
@@ -206,9 +170,6 @@ if cmp_status then
     })
 end
 
--- Sidebar setup
-require("nvim-tree").setup()
-
 -- mappings
 
 -- colors
@@ -237,12 +198,6 @@ vim.opt.listchars = {
 
 -- relative Numbers
 vim.opt.relativenumber = true
-
--- Toggle tree
--- 'ee' to focus Nvim Tree
-vim.api.nvim_set_keymap('n', '<leader>ee', ':NvimTreeFocus<CR>', { noremap = true, silent = true })
--- 'en' to toggle Nvim Tree
-vim.api.nvim_set_keymap('n', '<leader>en', ':NvimTreeToggle<CR>', { noremap = true, silent = true })
 
 -- Toggle diagnostics
 vim.api.nvim_set_keymap('n', '<leader>ii', '<cmd>lua vim.diagnostic.open_float()<CR>', { noremap = true, silent = true })
