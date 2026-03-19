@@ -1,6 +1,6 @@
--- disable netrw at the very start of your init.lua
-vim.g.loaded_netrw = 1
-vim.g.loaded_netrwPlugin = 1
+-- -- disable netrw at the very start of your init.lua
+-- vim.g.loaded_netrw = 1
+-- vim.g.loaded_netrwPlugin = 1
 
 -- optionally enable 24-bit colour
 vim.opt.termguicolors = true
@@ -32,10 +32,7 @@ require("mason-lspconfig").setup({
         config = function()
             -- Bare minimum setup
             require('telescope').setup({})
-
-            -- Two essential keybinds
             vim.keymap.set('n', '<leader>ff', '<cmd>Telescope find_files<cr>')  -- Files
-            vim.keymap.set('n', '<leader>fd', '<cmd>Telescope file_browser<cr>') -- Dirs
         end
     }
     use 'tpope/vim-fugitive'
@@ -364,3 +361,4 @@ vim.keymap.set('v', '<leader>p', '\"_dP')
 
 -- remove help
 vim.api.nvim_set_keymap('', '<F1>', '<Nop>', { noremap = true, silent = true })
+
