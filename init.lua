@@ -2,6 +2,10 @@
 vim.g.loaded_netrw = 1
 vim.g.loaded_netrwPlugin = 1
 
+
+-- reduce log size
+vim.lsp.set_log_level("error")
+
 -- 24-bit colour
 vim.opt.termguicolors = true
 
@@ -199,6 +203,9 @@ vim.opt.listchars = {
 
 -- Relative numbers
 vim.opt.relativenumber = true
+
+-- Foldcolumn
+vim.opt.foldcolumn = "auto"
 
 -- Timing
 vim.o.timeoutlen = 500
