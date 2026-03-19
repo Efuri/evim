@@ -1,8 +1,8 @@
--- -- disable netrw at the very start of your init.lua
--- vim.g.loaded_netrw = 1
--- vim.g.loaded_netrwPlugin = 1
+-- disable netrw since we're using oil.nvim
+vim.g.loaded_netrw = 1
+vim.g.loaded_netrwPlugin = 1
 
--- optionally enable 24-bit colour
+-- 24-bit colour
 vim.opt.termguicolors = true
 
 require('packer').startup(function(use)
@@ -10,132 +10,134 @@ require('packer').startup(function(use)
     use 'wbthomason/packer.nvim'
 
     -- LSP and Autocomplete
-    -- Initialize Mason (must run before lspconfig)
     use 'williamboman/mason.nvim'
     use 'williamboman/mason-lspconfig.nvim'
     use 'neovim/nvim-lspconfig'
     use 'hrsh7th/nvim-cmp'
     use 'hrsh7th/cmp-nvim-lsp'
-    require("mason").setup()
-    use {
-    'nvim-web-devicons'
-    }
+    use 'nvim-tree/nvim-web-devicons'
 
-require("mason").setup()
-require("mason-lspconfig").setup({
-})
+    -- Oil file explorer
+    use {
+        'stevearc/oil.nvim',
+        config = function()
+            require('oil').setup({
+                default_file_explorer = true,
+                columns = { 'icon' },
+                view_options = {
+                    show_hidden = false,
+                },
+            })
+        end
+    }
 
     -- Telescope
     use {
         'nvim-telescope/telescope.nvim',
         requires = { 'nvim-lua/plenary.nvim' },
         config = function()
-            -- Bare minimum setup
             require('telescope').setup({})
-            vim.keymap.set('n', '<leader>ff', '<cmd>Telescope find_files<cr>')  -- Files
         end
     }
+
     use 'tpope/vim-fugitive'
     use {
         'isak102/telescope-git-file-history.nvim',
         requires = {
-            'tpope/vim-fugitive',     -- Git commands dependency
-            'nvim-telescope/telescope.nvim'  -- Main telescope plugin
+            'tpope/vim-fugitive',
+            'nvim-telescope/telescope.nvim'
         },
         config = function()
             require('telescope').load_extension('git_file_history')
         end
     }
 
-    --bottombarr
+    -- Statusline
     use {
-    'nvim-lualine/lualine.nvim',
-    requires = { 'nvim-web-devicons' },  -- Keep the requirement for the icons
-    config = function()
-        require('lualine').setup {
-            options = {
-                icons_enabled = true,  -- Enable icons support
-                globalstatus = true,
-            },
-        }
-    end
-}
+        'nvim-lualine/lualine.nvim',
+        requires = { 'nvim-tree/nvim-web-devicons' },
+        config = function()
+            require('lualine').setup {
+                options = {
+                    icons_enabled = true,
+                    globalstatus = true,
+                },
+            }
+        end
+    }
 
     -- Treesitter
     use { 'nvim-treesitter/nvim-treesitter', run = ':TSUpdate' }
 
-    -- Monokai Pro theme
-    use ({ 'bluz71/vim-moonfly-colors' }) 
+    -- Theme
+    use { 'bluz71/vim-moonfly-colors' }
 
-    --commenter
+    -- Commenter
     use {
         'numToStr/Comment.nvim',
         config = function()
             require('Comment').setup()
         end
     }
-    -- Git status
-    use {'akinsho/git-conflict.nvim', tag = "*", config = function()
+
+    -- Git
+    use { 'akinsho/git-conflict.nvim', tag = "*", config = function()
         require('git-conflict').setup()
-    end}
+    end }
+
     use {
         'lewis6991/gitsigns.nvim',
         config = function()
             require('gitsigns').setup({
-                require('gitsigns').setup {
-                    signs = {
-                        add          = { text = '┃' },
-                        change       = { text = '┃' },
-                        delete       = { text = '_' },
-                        topdelete    = { text = '‾' },
-                        changedelete = { text = '~' },
-                        untracked    = { text = '┆' },
-                    },
-                    signs_staged = {
-                        add          = { text = '┃' },
-                        change       = { text = '┃' },
-                        delete       = { text = '_' },
-                        topdelete    = { text = '‾' },
-                        changedelete = { text = '~' },
-                        untracked    = { text = '┆' },
-                    },
-                    signs_staged_enable = true,
-                    signcolumn = true,  -- Toggle with `:Gitsigns toggle_signs`
-                    numhl      = false, -- Toggle with `:Gitsigns toggle_numhl`
-                    linehl     = false, -- Toggle with `:Gitsigns toggle_linehl`
-                    word_diff  = false, -- Toggle with `:Gitsigns toggle_word_diff`
-                    watch_gitdir = {
-                        follow_files = true
-                    },
-                    auto_attach = true,
-                    attach_to_untracked = false,
-                    current_line_blame = false, -- Toggle with `:Gitsigns toggle_current_line_blame`
-                    current_line_blame_opts = {
-                        virt_text = true,
-                        virt_text_pos = 'eol', -- 'eol' | 'overlay' | 'right_align'
-                        delay = 1000,
-                        ignore_whitespace = false,
-                        virt_text_priority = 100,
-                        use_focus = true,
-                    },
-                    current_line_blame_formatter = '<author>, <author_time:%R> - <summary>',
-                    sign_priority = 6,
-                    update_debounce = 100,
-                    status_formatter = nil, -- Use default
-                    max_file_length = 40000, -- Disable if file is longer than this (in lines)
-                    preview_config = {
-                        -- Options passed to nvim_open_win
-                        style = 'minimal',
-                        relative = 'cursor',
-                        row = 0,
-                        col = 1
-                    },
-                }
+                signs = {
+                    add          = { text = '┃' },
+                    change       = { text = '┃' },
+                    delete       = { text = '_' },
+                    topdelete    = { text = '‾' },
+                    changedelete = { text = '~' },
+                    untracked    = { text = '┆' },
+                },
+                signs_staged = {
+                    add          = { text = '┃' },
+                    change       = { text = '┃' },
+                    delete       = { text = '_' },
+                    topdelete    = { text = '‾' },
+                    changedelete = { text = '~' },
+                    untracked    = { text = '┆' },
+                },
+                signs_staged_enable = true,
+                signcolumn = true,
+                numhl      = false,
+                linehl     = false,
+                word_diff  = false,
+                watch_gitdir = { follow_files = true },
+                auto_attach = true,
+                attach_to_untracked = false,
+                current_line_blame = false,
+                current_line_blame_opts = {
+                    virt_text = true,
+                    virt_text_pos = 'eol',
+                    delay = 1000,
+                    ignore_whitespace = false,
+                    virt_text_priority = 100,
+                    use_focus = true,
+                },
+                current_line_blame_formatter = '<author>, <author_time:%R> - <summary>',
+                sign_priority = 6,
+                update_debounce = 100,
+                status_formatter = nil,
+                max_file_length = 40000,
+                preview_config = {
+                    style = 'minimal',
+                    relative = 'cursor',
+                    row = 0,
+                    col = 1
+                },
             })
         end
     }
 
-    --mouse rezise
+    -- Window resize
     use {
         "sindrets/winshift.nvim",
         config = function()
@@ -143,6 +145,10 @@ require("mason-lspconfig").setup({
         end
     }
 end)
+
+-- Mason setup (outside packer block to avoid duplicate calls)
+require("mason").setup()
+require("mason-lspconfig").setup({})
 
 -- Treesitter setup
 local ts_status, ts = pcall(require, 'nvim-treesitter.configs')
@@ -167,198 +173,193 @@ if cmp_status then
     })
 end
 
--- mappings
-
--- colors
+-- Colors
 vim.cmd [[colorscheme moonfly]]
 vim.opt.cursorline = true
 
--- Set leader key to space (if not already set)
+-- Leader
 vim.g.mapleader = " "
 
--- Tabs and Indentation
-vim.opt.expandtab = true       -- Use spaces instead of tabs
-vim.opt.shiftwidth = 4         -- Indentation amount for `>>`, `<<`, and `=`
-vim.opt.tabstop = 4            -- Number of spaces per tab character
-vim.opt.smartindent = true     -- Smart indenting for C-like languages
-vim.opt.autoindent = true      -- Copy indent from current line when starting new line
+-- Tabs and indentation
+vim.opt.expandtab = true
+vim.opt.shiftwidth = 4
+vim.opt.tabstop = 4
+vim.opt.smartindent = true
+vim.opt.autoindent = true
 
--- Show whitespace characters like spaces, tabs, EOL etc.
-vim.opt.list = true            -- Enable showing whitespace characters
+-- Whitespace characters
+vim.opt.list = true
 vim.opt.listchars = {
-    tab = "→ ",                  -- Show tab as → followed by a space
-    trail = "·",                 -- Show trailing spaces as ·
-    eol = "↩",                   -- Show end of line as ¬
-    extends = "▶",               -- Character shown when line continues beyond screen right
-    precedes = "◀",              -- Character shown when line continues beyond screen left
+    tab = "→ ",
+    trail = "·",
+    eol = "↩",
+    extends = "▶",
+    precedes = "◀",
 }
 
--- relative Numbers
+-- Relative numbers
 vim.opt.relativenumber = true
 
--- Toggle diagnostics
-vim.api.nvim_set_keymap('n', '<leader>ii', '<cmd>lua vim.diagnostic.open_float()<CR>', { noremap = true, silent = true })
-vim.keymap.set('n', '<leader>id', vim.lsp.buf.definition, { desc = 'Go to definition' })
--- new tab
-vim.api.nvim_set_keymap('n', '<leader>tn', ':tabnew<CR>', { noremap = true, silent = true })
--- new tab with terminal
-vim.api.nvim_set_keymap('n', '<leader>tt', ':tabnew | terminal<CR>', { noremap = true, silent = true })
--- new tab with terminal
-vim.api.nvim_set_keymap('n', '<leader>tc', ':tabc | terminal<CR>', { noremap = true, silent = true })
+-- Timing
+vim.o.timeoutlen = 500
+vim.o.ttimeoutlen = 10
 
---window mappping
+-- Winbar
+vim.opt.winbar = "%f %m"
+
+-- =====================
+-- Keymaps
+-- =====================
 local opts = { noremap = true, silent = true }
-vim.api.nvim_set_keymap('n', '<leader>wh', '<C-w>h', opts)   -- move to left window
-vim.api.nvim_set_keymap('n', '<leader>wj', '<C-w>j', opts)   -- move to window below
-vim.api.nvim_set_keymap('n', '<leader>wk', '<C-w>k', opts)   -- move to window above
-vim.api.nvim_set_keymap('n', '<leader>wl', '<C-w>l', opts)   -- move to right window
-vim.api.nvim_set_keymap('n', '<leader>wH', '<C-w>H', opts)   -- move to left window
-vim.api.nvim_set_keymap('n', '<leader>wJ', '<C-w>J', opts)   -- move to window below
-vim.api.nvim_set_keymap('n', '<leader>wK', '<C-w>K', opts)   -- move to window above
-vim.api.nvim_set_keymap('n', '<leader>wL', '<C-w>L', opts)   -- move to right window
 
--- Make sure 'Comment.nvim' is loaded first, then set keymap
-vim.api.nvim_set_keymap('n', '<leader>/', '<cmd>lua require("Comment.api").toggle.linewise.current()<CR>', { noremap = true, silent = true })
-vim.api.nvim_set_keymap('v', '<leader>/', '<esc><cmd>lua require("Comment.api").toggle.linewise(vim.fn.visualmode())<CR>', { noremap = true, silent = true })
+-- Oil - press - to open file explorer in current file's directory
+vim.keymap.set("n", "-", "<CMD>Oil<CR>", { desc = "Open parent directory" })
 
--- Save current buffer (leader + ww)
+-- Diagnostics / LSP
+vim.api.nvim_set_keymap('n', '<leader>ii', '<cmd>lua vim.diagnostic.open_float()<CR>', opts)
+vim.keymap.set('n', '<leader>id', vim.lsp.buf.definition, { desc = 'Go to definition' })
+
+-- Tabs
+vim.api.nvim_set_keymap('n', '<leader>tn', ':tabnew<CR>', opts)
+vim.api.nvim_set_keymap('n', '<leader>tt', ':tabnew | terminal<CR>', opts)
+vim.api.nvim_set_keymap('n', '<leader>tc', ':tabc<CR>', opts)
+
+-- Window navigation
+vim.api.nvim_set_keymap('n', '<leader>wh', '<C-w>h', opts)
+vim.api.nvim_set_keymap('n', '<leader>wj', '<C-w>j', opts)
+vim.api.nvim_set_keymap('n', '<leader>wk', '<C-w>k', opts)
+vim.api.nvim_set_keymap('n', '<leader>wl', '<C-w>l', opts)
+vim.api.nvim_set_keymap('n', '<leader>wH', '<C-w>H', opts)
+vim.api.nvim_set_keymap('n', '<leader>wJ', '<C-w>J', opts)
+vim.api.nvim_set_keymap('n', '<leader>wK', '<C-w>K', opts)
+vim.api.nvim_set_keymap('n', '<leader>wL', '<C-w>L', opts)
+
+-- Comments
+vim.api.nvim_set_keymap('n', '<leader>/', '<cmd>lua require("Comment.api").toggle.linewise.current()<CR>', opts)
+vim.api.nvim_set_keymap('v', '<leader>/', '<esc><cmd>lua require("Comment.api").toggle.linewise(vim.fn.visualmode())<CR>', opts)
+
+-- Save/Quit
 vim.keymap.set('n', '<leader>ww', ':w<CR>', opts)
-
--- Save all buffers (leader + wa)
 vim.keymap.set('n', '<leader>wa', ':wa<CR>', opts)
-
--- Quit current window (leader + qw)
 vim.keymap.set('n', '<leader>qq', ':q<CR>', opts)
-
--- Quit all (leader + qa)
 vim.keymap.set('n', '<leader>qa', function()
-    vim.cmd('mks! s.nvim')  -- Save session
-    vim.cmd('qa')             -- Quit all
+    vim.cmd('mks! s.nvim')
+    vim.cmd('qa')
 end, opts)
 
 -- Splits
-vim.keymap.set('n', 'ss', ':split<CR>', { noremap = true, silent = true })
-vim.keymap.set('n', 'sv', ':vsplit<CR>', { noremap = true, silent = true })
+vim.keymap.set('n', 'ss', ':split<CR>', opts)
+vim.keymap.set('n', 'sv', ':vsplit<CR>', opts)
 
--- telescope bindings
+-- Telescope
 vim.keymap.set('n', '<leader>ff', '<cmd>Telescope find_files<cr>', { desc = 'Find Files' })
 vim.keymap.set('n', '<leader>fg', '<cmd>Telescope live_grep<cr>', { desc = 'Live Grep' })
-vim.keymap.set('n', '<leader>fa', '<cmd>Telescope<cr>', { desc = 'See all Telescope commands' })
+vim.keymap.set('n', '<leader>fa', '<cmd>Telescope<cr>', { desc = 'All Telescope commands' })
 
--- macro bindings
+-- Macros
 vim.keymap.set('n', '<leader>ma', '@a')
 vim.keymap.set('n', '<leader>ms', '@s')
 vim.keymap.set('n', '<leader>md', '@d')
 vim.keymap.set('n', '<leader>mm', '@@')
 
---gitsigns
-vim.keymap.set('n', '<leader>bb', '<cmd>Gitsigns toggle_current_line_blame<cr>', { desc = 'Toggles gitlbame' })
-vim.keymap.set('n', '<leader>bh', '<cmd>Telescope git_file_history<cr>', { desc = 'Toggles gitlbame' })
+-- Git
+vim.keymap.set('n', '<leader>bb', '<cmd>Gitsigns toggle_current_line_blame<cr>', { desc = 'Toggle git blame' })
+vim.keymap.set('n', '<leader>bh', '<cmd>Telescope git_file_history<cr>', { desc = 'Git file history' })
 
--- latex
+-- LaTeX
 vim.keymap.set("n", "<leader>ll", function()
-  local file = vim.fn.expand("%")
-  vim.cmd("write") -- save first
-  vim.cmd("!pdflatex " .. file)
-end, { desc = "Compile LaTeX with pdflatex" })
+    local file = vim.fn.expand("%")
+    vim.cmd("write")
+    vim.cmd("!pdflatex " .. file)
+end, { desc = "Compile LaTeX" })
 
 vim.keymap.set("n", "<leader>lw", function()
-  local file = vim.fn.expand("%")
-  vim.cmd("write")  -- save first
-  local output = vim.fn.system({"texcount", file})
-  print(output)
-end, { desc = "Word count for LaTeX" })
+    local file = vim.fn.expand("%")
+    vim.cmd("write")
+    local output = vim.fn.system({"texcount", file})
+    print(output)
+end, { desc = "Word count LaTeX" })
 
+-- Blackhole paste
+vim.keymap.set('v', '<leader>p', '"_dP')
+
+-- Disable F1 help
+vim.api.nvim_set_keymap('', '<F1>', '<Nop>', opts)
+
+-- =====================
+-- Commands
+-- =====================
 vim.api.nvim_create_user_command('Rapport', function()
-  local lines = {
-    '\\documentclass[12pt, a4paper, oneside]{article}',
-    '',
-    '\\usepackage[utf8]{inputenc}',
-    '\\usepackage[T1]{fontenc}',
-    '\\usepackage[a4paper, margin=2cm]{geometry}',
-    '',
-    '\\usepackage[swedish]{babel}',
-    '%\\usepackage[english]{babel}',
-    '',
-    '\\usepackage[style=authoryear, backend=biber]{biblatex}',
-    '\\addbibresource{references.bib}',
-    '',
-    '\\usepackage{listings}',
-    '%\\usepackage{graphicx}',
-    '',
-    '\\lstset{',
-      'basicstyle=\\ttfamily\\bfseries,',
-      'breakindent=0pt,',
-      'breaklines=true',
-    '}',
-    '\\title{}',
-    '\\author{}',
-    '\\date{\\today}',
-    '',
-    '\\begin{document}',
-    '\\maketitle',
-    '',
-    '',
-    '\\end{document}',
-  }
-  vim.api.nvim_put(lines, 'l', true, true)
+    local lines = {
+        '\\documentclass[12pt, a4paper, oneside]{article}',
+        '',
+        '\\usepackage[utf8]{inputenc}',
+        '\\usepackage[T1]{fontenc}',
+        '\\usepackage[a4paper, margin=2cm]{geometry}',
+        '',
+        '\\usepackage[swedish]{babel}',
+        '%\\usepackage[english]{babel}',
+        '',
+        '\\usepackage[style=authoryear, backend=biber]{biblatex}',
+        '\\addbibresource{references.bib}',
+        '',
+        '\\usepackage{listings}',
+        '%\\usepackage{graphicx}',
+        '',
+        '\\lstset{',
+        'basicstyle=\\ttfamily\\bfseries,',
+        'breakindent=0pt,',
+        'breaklines=true',
+        '}',
+        '\\title{}',
+        '\\author{}',
+        '\\date{\\today}',
+        '',
+        '\\begin{document}',
+        '\\maketitle',
+        '',
+        '',
+        '\\end{document}',
+    }
+    vim.api.nvim_put(lines, 'l', true, true)
 end, {})
 
 vim.api.nvim_create_user_command('BF', function()
-  local row, _ = unpack(vim.api.nvim_win_get_cursor(0))
-  
-  local lines = {
-    '\\begin{lstlisting}[basicstyle=\\bfseries]',
-    '',
-    '\\end{lstlisting}'
-  }
-  vim.api.nvim_buf_set_lines(0, row, row, true, lines)
-
-  vim.api.nvim_win_set_cursor(0, {row + 2, 0})
+    local row, _ = unpack(vim.api.nvim_win_get_cursor(0))
+    local lines = {
+        '\\begin{lstlisting}[basicstyle=\\bfseries]',
+        '',
+        '\\end{lstlisting}'
+    }
+    vim.api.nvim_buf_set_lines(0, row, row, true, lines)
+    vim.api.nvim_win_set_cursor(0, {row + 2, 0})
 end, {})
 
 vim.api.nvim_create_user_command('BILD', function()
-  local row, _ = unpack(vim.api.nvim_win_get_cursor(0))
-  
-  local lines = {
-    '\\begin{figure}[h]',
+    local row, _ = unpack(vim.api.nvim_win_get_cursor(0))
+    local lines = {
+        '\\begin{figure}[h]',
         '\\centering',
         '\\includegraphics[width=0.6\\textwidth]{bilder/kursbok.jpg}',
         '\\caption{Kursboks tabell}',
         '\\label{fig:kursbok}',
-    '\\end{figure}'
-  }
-  vim.api.nvim_buf_set_lines(0, row, row, true, lines)
-  vim.api.nvim_win_set_cursor(0, {row + 3, 0})
+        '\\end{figure}'
+    }
+    vim.api.nvim_buf_set_lines(0, row, row, true, lines)
+    vim.api.nvim_win_set_cursor(0, {row + 3, 0})
 end, {})
 
-
-
-
-
-
-
-
---text shortcuts
---vim.keymap.set("n", "<leader>ii", "i#include <>\27i", { noremap = true })
-
-vim.o.timeoutlen = 500
-vim.o.ttimeoutlen = 10
-
--- show window bar
-vim.opt.winbar = "%f %m"
-
-vim.api.nvim_create_user_command('Clean', function(opts)
-    -- Inaktivera highlighting temporärt för att undvika "out of range"
-    local line1 = opts.line1
-    local line2 = opts.line2
-    vim.cmd(string.format('%d,%dg/^$/d', line1, line2))
+vim.api.nvim_create_user_command('Clean', function(o)
+    vim.cmd(string.format('%d,%dg/^$/d', o.line1, o.line2))
 end, { range = true })
 
-
--- blackhole paste
-vim.keymap.set('v', '<leader>p', '\"_dP')
-
--- remove help
-vim.api.nvim_set_keymap('', '<F1>', '<Nop>', { noremap = true, silent = true })
-
+-- open oil at start
+vim.api.nvim_create_autocmd("VimEnter", {
+    callback = function()
+        if vim.fn.argc() == 0 then
+            vim.defer_fn(function()
+                require("oil").open(vim.fn.getcwd())
+            end, 0)
+        end
+    end,
+})
