@@ -9,9 +9,8 @@ If you installed your Nvim now:
   Confirm with Nvim -version
   If the version is old please try the versionfixer.sh
 
-Place init.lua in ~/.config/nvim/init.lua
+Place init.lua in ~/.config/nvim/init.lua or symbolic link it with ln -s
 
-Run installpacker.sh and others wanted
 Open nvim and run:
   PackerSync
 And for your lsp packages
