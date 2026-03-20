@@ -77,9 +77,6 @@ vim.keymap.set('n', 'ss', ':split<CR>', opts)
 vim.keymap.set('n', 'sv', ':vsplit<CR>', opts)
 
 -- Macros
-vim.keymap.set('n', '<leader>ma', '@a')
-vim.keymap.set('n', '<leader>ms', '@s')
-vim.keymap.set('n', '<leader>md', '@d')
 vim.keymap.set('n', '<leader>mm', '@@')
 
 -- LaTeX
